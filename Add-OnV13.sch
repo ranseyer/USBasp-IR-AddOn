@@ -9422,7 +9422,6 @@ Source: http://www.lumberg.com/Produkte/PDFs/1501_03.pdf</description>
 <sheets>
 <sheet>
 <plain>
-<text x="-5.08" y="124.46" size="1.778" layer="91">Achtung: PINS sind gespiegelt!</text>
 <text x="-63.5" y="114.3" size="1.778" layer="91">Out</text>
 <text x="-63.5" y="119.38" size="1.778" layer="91">+</text>
 <text x="-99.06" y="134.62" size="1.778" layer="91">laut VDR-Wiki:
@@ -9439,8 +9438,8 @@ Tip -- VCC</text>
 <instance part="MB" gate="G$1" x="30.48" y="81.28" rot="R180"/>
 <instance part="C1" gate="G$1" x="-45.72" y="109.22"/>
 <instance part="GND1" gate="1" x="-50.8" y="96.52"/>
-<instance part="GND2" gate="1" x="22.86" y="119.38" rot="R180"/>
-<instance part="FREI" gate="G$1" x="-20.32" y="104.14"/>
+<instance part="GND2" gate="1" x="22.86" y="101.6"/>
+<instance part="FREI" gate="G$1" x="-20.32" y="121.92"/>
 <instance part="GND3" gate="1" x="-15.24" y="73.66"/>
 <instance part="SW" gate="G$1" x="30.48" y="91.44" rot="R180"/>
 <instance part="OK2" gate="A" x="2.54" y="83.82"/>
@@ -9469,24 +9468,17 @@ Tip -- VCC</text>
 </net>
 <net name="SCK" class="0">
 <segment>
-<label x="-5.08" y="114.3" size="1.778" layer="95"/>
-<pinref part="2USB-ASP" gate="G$1" pin="3"/>
 <wire x1="-63.5" y1="114.3" x2="-53.34" y2="114.3" width="0.1524" layer="91"/>
 <pinref part="SV1" gate="1" pin="1"/>
 <pinref part="X1" gate="G$1" pin="2"/>
-<wire x1="-53.34" y1="114.3" x2="5.08" y2="114.3" width="0.1524" layer="91"/>
 <wire x1="-71.12" y1="132.08" x2="-53.34" y2="132.08" width="0.1524" layer="91"/>
 <wire x1="-53.34" y1="132.08" x2="-53.34" y2="114.3" width="0.1524" layer="91"/>
+<wire x1="-53.34" y1="114.3" x2="-27.94" y2="114.3" width="0.1524" layer="91"/>
+<wire x1="-27.94" y1="114.3" x2="-27.94" y2="109.22" width="0.1524" layer="91"/>
 <junction x="-53.34" y="114.3"/>
-</segment>
-</net>
-<net name="MISO" class="0">
-<segment>
-<pinref part="R1" gate="G$1" pin="1"/>
-<wire x1="-22.86" y1="86.36" x2="-22.86" y2="116.84" width="0.1524" layer="91"/>
-<pinref part="2USB-ASP" gate="G$1" pin="1"/>
-<wire x1="-22.86" y1="116.84" x2="5.08" y2="116.84" width="0.1524" layer="91"/>
-<label x="-5.08" y="116.84" size="1.778" layer="95"/>
+<pinref part="2USB-ASP" gate="G$1" pin="7"/>
+<label x="-5.08" y="109.22" size="1.778" layer="95"/>
+<wire x1="-27.94" y1="109.22" x2="5.08" y2="109.22" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -9503,6 +9495,16 @@ Tip -- VCC</text>
 <wire x1="-15.24" y1="81.28" x2="-7.62" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 <segment>
+<pinref part="GND4" gate="1" pin="GND"/>
+<pinref part="X1" gate="G$1" pin="1"/>
+<wire x1="-48.26" y1="139.7" x2="-50.8" y2="139.7" width="0.1524" layer="91"/>
+<wire x1="-50.8" y1="139.7" x2="-71.12" y2="139.7" width="0.1524" layer="91"/>
+<wire x1="-50.8" y1="139.7" x2="-50.8" y2="121.92" width="0.1524" layer="91"/>
+<junction x="-50.8" y="139.7"/>
+<pinref part="SV1" gate="1" pin="4"/>
+<wire x1="-50.8" y1="121.92" x2="-63.5" y2="121.92" width="0.1524" layer="91"/>
+</segment>
+<segment>
 <pinref part="2USB-ASP" gate="G$1" pin="8"/>
 <wire x1="12.7" y1="109.22" x2="22.86" y2="109.22" width="0.1524" layer="91"/>
 <pinref part="2USB-ASP" gate="G$1" pin="4"/>
@@ -9512,23 +9514,14 @@ Tip -- VCC</text>
 <wire x1="22.86" y1="111.76" x2="12.7" y2="111.76" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="109.22" x2="22.86" y2="111.76" width="0.1524" layer="91"/>
 <junction x="22.86" y="111.76"/>
-<pinref part="GND2" gate="1" pin="GND"/>
-<wire x1="22.86" y1="116.84" x2="22.86" y2="114.3" width="0.1524" layer="91"/>
-<junction x="22.86" y="114.3"/>
-<pinref part="2USB-ASP" gate="G$1" pin="2"/>
-<wire x1="12.7" y1="116.84" x2="22.86" y2="116.84" width="0.1524" layer="91"/>
-<junction x="22.86" y="116.84"/>
 <label x="17.78" y="111.76" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="GND4" gate="1" pin="GND"/>
-<pinref part="X1" gate="G$1" pin="1"/>
-<wire x1="-48.26" y1="139.7" x2="-50.8" y2="139.7" width="0.1524" layer="91"/>
-<wire x1="-50.8" y1="139.7" x2="-71.12" y2="139.7" width="0.1524" layer="91"/>
-<wire x1="-50.8" y1="139.7" x2="-50.8" y2="121.92" width="0.1524" layer="91"/>
-<junction x="-50.8" y="139.7"/>
-<pinref part="SV1" gate="1" pin="4"/>
-<wire x1="-50.8" y1="121.92" x2="-63.5" y2="121.92" width="0.1524" layer="91"/>
+<pinref part="GND2" gate="1" pin="GND"/>
+<wire x1="22.86" y1="104.14" x2="22.86" y2="106.68" width="0.1524" layer="91"/>
+<junction x="22.86" y="109.22"/>
+<pinref part="2USB-ASP" gate="G$1" pin="10"/>
+<wire x1="22.86" y1="106.68" x2="22.86" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="12.7" y1="106.68" x2="22.86" y2="106.68" width="0.1524" layer="91"/>
+<junction x="22.86" y="106.68"/>
 </segment>
 </net>
 <net name="N$3" class="0">
@@ -9563,13 +9556,10 @@ Tip -- VCC</text>
 <wire x1="-25.4" y1="132.08" x2="-25.4" y2="119.38" width="0.1524" layer="91"/>
 <pinref part="R2" gate="G$1" pin="2"/>
 <wire x1="-25.4" y1="119.38" x2="-30.48" y2="119.38" width="0.1524" layer="91"/>
-<wire x1="30.48" y1="132.08" x2="30.48" y2="119.38" width="0.1524" layer="91"/>
-<wire x1="30.48" y1="119.38" x2="27.94" y2="114.3" width="0.1524" layer="91"/>
-<wire x1="27.94" y1="114.3" x2="27.94" y2="109.22" width="0.1524" layer="91"/>
-<wire x1="27.94" y1="109.22" x2="25.4" y2="106.68" width="0.1524" layer="91"/>
-<pinref part="2USB-ASP" gate="G$1" pin="10"/>
-<wire x1="25.4" y1="106.68" x2="12.7" y2="106.68" width="0.1524" layer="91"/>
-<label x="17.78" y="106.68" size="1.778" layer="95"/>
+<wire x1="30.48" y1="132.08" x2="30.48" y2="116.84" width="0.1524" layer="91"/>
+<pinref part="2USB-ASP" gate="G$1" pin="2"/>
+<wire x1="30.48" y1="116.84" x2="12.7" y2="116.84" width="0.1524" layer="91"/>
+<label x="17.78" y="116.84" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -9581,32 +9571,40 @@ Tip -- VCC</text>
 </net>
 <net name="RST" class="0">
 <segment>
-<pinref part="FREI" gate="G$1" pin="3"/>
-<wire x1="-12.7" y1="106.68" x2="-10.16" y2="106.68" width="0.1524" layer="91"/>
-<wire x1="-10.16" y1="106.68" x2="-5.08" y2="111.76" width="0.1524" layer="91"/>
 <pinref part="2USB-ASP" gate="G$1" pin="5"/>
-<wire x1="-5.08" y1="111.76" x2="5.08" y2="111.76" width="0.1524" layer="91"/>
+<wire x1="-12.7" y1="111.76" x2="5.08" y2="111.76" width="0.1524" layer="91"/>
 <label x="-5.08" y="111.76" size="1.778" layer="95"/>
+<pinref part="FREI" gate="G$1" pin="1"/>
+<wire x1="-12.7" y1="119.38" x2="-12.7" y2="111.76" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="MISO" class="0">
+<segment>
+<pinref part="2USB-ASP" gate="G$1" pin="9"/>
+<label x="-5.08" y="106.68" size="1.778" layer="95"/>
+<pinref part="R1" gate="G$1" pin="1"/>
+<wire x1="-22.86" y1="86.36" x2="-22.86" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="-22.86" y1="106.68" x2="5.08" y2="106.68" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="MOSI" class="0">
+<segment>
+<pinref part="FREI" gate="G$1" pin="3"/>
+<wire x1="-12.7" y1="124.46" x2="-7.62" y2="124.46" width="0.1524" layer="91"/>
+<wire x1="-7.62" y1="124.46" x2="-7.62" y2="116.84" width="0.1524" layer="91"/>
+<pinref part="2USB-ASP" gate="G$1" pin="1"/>
+<wire x1="-7.62" y1="116.84" x2="5.08" y2="116.84" width="0.1524" layer="91"/>
+<label x="-5.08" y="116.84" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="NC" class="0">
 <segment>
 <pinref part="FREI" gate="G$1" pin="2"/>
-<wire x1="-12.7" y1="104.14" x2="-10.16" y2="104.14" width="0.1524" layer="91"/>
-<wire x1="-10.16" y1="104.14" x2="-5.08" y2="109.22" width="0.1524" layer="91"/>
-<pinref part="2USB-ASP" gate="G$1" pin="7"/>
-<wire x1="-5.08" y1="109.22" x2="5.08" y2="109.22" width="0.1524" layer="91"/>
-<label x="-5.08" y="109.22" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="MOSI" class="0">
-<segment>
-<pinref part="FREI" gate="G$1" pin="1"/>
-<wire x1="-12.7" y1="101.6" x2="-10.16" y2="101.6" width="0.1524" layer="91"/>
-<wire x1="-10.16" y1="101.6" x2="-5.08" y2="106.68" width="0.1524" layer="91"/>
-<pinref part="2USB-ASP" gate="G$1" pin="9"/>
-<wire x1="-5.08" y1="106.68" x2="5.08" y2="106.68" width="0.1524" layer="91"/>
-<label x="-5.08" y="106.68" size="1.778" layer="95"/>
+<wire x1="-12.7" y1="121.92" x2="-10.16" y2="121.92" width="0.1524" layer="91"/>
+<wire x1="-10.16" y1="121.92" x2="-10.16" y2="114.3" width="0.1524" layer="91"/>
+<pinref part="2USB-ASP" gate="G$1" pin="3"/>
+<wire x1="-10.16" y1="114.3" x2="5.08" y2="114.3" width="0.1524" layer="91"/>
+<label x="-5.08" y="114.3" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
