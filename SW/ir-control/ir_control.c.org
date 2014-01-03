@@ -46,12 +46,8 @@ int main(int argc, char **argv) {
 				poweron_enable = 1;
 			break;
 		case 'r':
-                        {
-                        unsigned char cnt;
-                        cnt=(unsigned char)atoi(optarg);
-                        writeMinRepeats(cnt);
-                        }
-                        break;
+			printf("%s: not yet implemented r=%s\n", PACKAGE, optarg);
+			break;
 		case 's':
 			readPowerOn = 1;
 			break;
@@ -232,23 +228,21 @@ int deleteTrainedIRCode() {
 	return err == 8 ? 0 : err;
 }
 
-int writeMinRepeats(unsigned char count) {
-        int retcount;
-        char buffer[2];
-        buffer[0] = 0;
-        buffer[1] = count;
-        retcount = usb_control_msg(handle, /* dev_handle */
-                        0x21,// LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE | LIBUSB_ENDPOINT_OUT, /* bmRequestType */
-                        0x09, /* bRequest */
-                        0x0308, /* wValue */
-                        0x0000, /* wIndex */
-                        buffer, /* data */
-                        0x01, /* wLength */
-                        3000); /* timeout */
-        return retcount != 2 ? -1 : 0;
+int writeMinRepeats(int count) {
+	int retcount;
+	char buffer[2];
+	buffer[1] = count;
+
+	retcount = usb_control_msg(handle, /* dev_handle */
+			0x21,// LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE | LIBUSB_ENDPOINT_OUT,  /* bmRequestType */
+			0x09, /* bRequest */
+			0x0304, /* wValue */
+			0x0000, /* wIndex */
+			buffer, /* data */
+			0x02, /* wLength */
+			3000); /* timeout */
+	return retcount != 2 ? -1 : 0;
 }
-
-
 
 static int usbGetStringAscii(usb_dev_handle *dev, int index, int langid,
 		char *buf, int buflen) {
