@@ -35,7 +35,7 @@ void readLogData(void);
 //WRITE
 int writePowerOnEnabled(int status);
 int writeTrainedIRCode(void);
-int writeMinRepeats(int count);
+int writeMinRepeats(unsigned char count);
 int deleteTrainedIRCode(void);
 
 void printIrmpVersion(void);
