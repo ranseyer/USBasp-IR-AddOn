@@ -3,6 +3,7 @@
  *
  *  Created on: 20.05.2012
  *      Author: muebau
+ *      Modified 04.01.2013 Martin thanks to Wirbel+Bleifuss2
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -202,7 +203,7 @@ int writePowerOnEnabled(int status) {
 	count = usb_control_msg(handle, /* dev_handle */
 			0x21,// LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE | LIBUSB_ENDPOINT_OUT,  /* bmRequestType */
 			0x09, /* bRequest */
-			0x0308, /* wValue */
+			0x0304, /* wValue */
 			0x0000, /* wIndex */
 			buffer, /* data */
 			0x02, /* wLength */
