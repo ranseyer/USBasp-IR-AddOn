@@ -4,6 +4,7 @@
  *  Created on: 20.05.2012
  *      Author: muebau
  *      Modified 04.01.2013 Martin thanks to Wirbel+Bleifuss2
+ *      23.01.14 Fix repeatrate by Woggle: http://www.vdr-portal.de/board16-video-disk-recorder/board4-vdr-installation/p1183244-gel%C3%B6st-samsung-fernbedienung-mit-usb-ir-receiver-einrichten/#post1183244
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,6 +19,8 @@ int del_code = 0;
 int poweron_enable = -1;
 int readPowerOn = 0;
 int printVersion = 0;
+
+unsigned char repeat = 0;
 
 usb_dev_handle *handle = NULL;
 
@@ -47,11 +50,7 @@ int main(int argc, char **argv) {
 				poweron_enable = 1;
 			break;
 		case 'r':
-                        {
-                        unsigned char cnt;
-                        cnt=(unsigned char)atoi(optarg);
-                        writeMinRepeats(cnt);
-                        }
+                        repeat = (unsigned char) atoi(optarg);
                         break;
 		case 's':
 			readPowerOn = 1;
@@ -102,6 +101,10 @@ int main(int argc, char **argv) {
 
 	if(poweron_enable != -1) {
 		writePowerOnEnabled(poweron_enable);
+	}
+
+	if(repeat) {
+                writeMinRepeats(repeat);
 	}
 
 	usb_release_interface(handle, 0);
@@ -216,7 +219,7 @@ int deleteTrainedIRCode() {
 
 	IR_DATA emptyCode;
 
-	emptyCode.repeat = 23;
+	emptyCode.dummy = 0;
 	emptyCode.protocol = 0;
 	emptyCode.address = 0;
 	emptyCode.command = 0;
