@@ -247,7 +247,7 @@ int writeMinRepeats(unsigned char count) {
                         0x0308, /* wValue */
                         0x0000, /* wIndex */
                         buffer, /* data */
-                        0x01, /* wLength */
+                        0x02, /* wLength */
                         3000); /* timeout */
         return retcount != 2 ? -1 : 0;
 }
