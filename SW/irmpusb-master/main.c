@@ -38,7 +38,7 @@ const char IrmpVersion[] = "2.2.3";
 #define led1Off()   PORTC |= (1 << PC1)
 #define led2On()  	PORTC &= ~(1 << PC0)
 #define led2Off() 	PORTC |= (1 << PC0)
-
+ 
 
 /* ------------------------------------------------------------------------- */
 /* ----------------------------- USB interface ----------------------------- */
@@ -94,12 +94,12 @@ const PROGMEM char usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LENGTH] 
     0x95, 0x02,                    //   REPORT_COUNT (2)
     0x09, 0x00,                    //   USAGE (Undefined)
     0x82, 0x00, 0x01,              //   INPUT (Data,Ary,Abs,Buf)
-
+	
     0x85, 0x0B,                    //   REPORT_ID (11)
     0x96, 0xBC, 0x02,              //   REPORT_COUNT (700)
     0x09, 0x00,                    //   USAGE (Undefined)
     0xb2, 0x02, 0x01,              //   FEATURE (Data,Var,Abs,Buf)
-#endif
+#endif	
     0xc0                           // END_COLLECTION
 };
 
@@ -154,7 +154,7 @@ static uchar    replyBuf[16];
 void
 timer_init (void)
 {
-																			/* IR polling timer */
+																			/* IR polling timer */		
 	TCCR1B  = (1 << WGM12) | (1 << CS10);									// switch CTC Mode on, set prescaler to 1
 
 	// may adjust IR polling rate here to optimize IR receiving:
@@ -162,8 +162,8 @@ timer_init (void)
 
 	// enable Timer1 for IR polling
 	#if defined (__AVR_ATmega8__) || defined (__AVR_ATmega16__) || defined (__AVR_ATmega32__) || defined (__AVR_ATmega64__) || defined (__AVR_ATmega162__)
-		TIMSK = 1 << OCIE1A;   												// Timer1A ISR activate
-	#else
+		TIMSK = 1 << OCIE1A;   												// Timer1A ISR activate 		
+	#else										 				
 		TIMSK1  = 1 << OCIE1A;                 								// Timer1A ISR activate
 	#endif	// __AVR...
 }
@@ -172,15 +172,16 @@ timer_init (void)
  * init all io pins of the AVR, first all to input with pullups. then config USB and output pin
  *---------------------------------------------------------------------------------------------------------------------------------------------------
  */
-void
-init_io(void)
+void 
+init_io(void) 
 {
 	/* first set all pins to input */
     PORTB = 0xFF;   													/* activate all pull-ups */
     DDRB = 0;       													/* all pins input */
     PORTD = 0xFF;   													/* activate all pull-ups */
-	PORTD &=~(1<<PD2); /* deactivate pull-up on int0 line */
     DDRD = 0;    														/* all pins input */
+
+    PORTD &=~(1<<PD2);													/* deactivate pull-up on int0 line */
 
 	/* all inputs except PC0, PC1 */
 	DDRC = 0x03;
@@ -191,11 +192,11 @@ init_io(void)
 
 	#if USE_PowerOnFunction
 		/* config PowerOn pin */
-		SWITCH_PORT ^=	_BV (SWITCH_BIT);								/* deactivate pull-ups on PowerOn pin */
+		SWITCH_PORT ^=	_BV (SWITCH_BIT);								/* deactivate pull-ups on PowerOn pin */ 	
 		SWITCH_DDR ^= _BV (SWITCH_BIT);									/* set switch pin as digital output */
 	#endif
 }
-
+ 
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
  * timer 1 compare handler, should be called every 1/10000 sec
@@ -220,10 +221,10 @@ uchar   usbFunctionRead(uchar *data, uchar len)
 {
     if(len > bytesRemaining)
         len = bytesRemaining;
-
+		
 	if ( DoReadReport == ReadIrmpVersion)
 	{
-		memcpy(data, &replyBuf[currentAddress], len);
+		memcpy(data, &replyBuf[currentAddress], len);	
 	}
 	#if IRMP_LOGGING
 	else if ( DoReadReport == ReadLogData )
@@ -252,24 +253,24 @@ uchar   usbFunctionWrite(uchar *data, uchar len)
 	if ( DoWriteReport == SetPowerOnEnabled )
 	{
 		eeprom_write_block(&data[1], (uchar *)0 + currentAddress, len);						// store new value of PowerOn in eeprom
-		memcpy(&PowerOnEnabled, &data[1], sizeof(PowerOnEnabled));							// update PowerOn flag:
+		memcpy(&PowerOnEnabled, &data[1], sizeof(PowerOnEnabled));							// update PowerOn flag:			
 	}
 	else if ( DoWriteReport == SetTrainedIRCode )
 	{
 		eeprom_write_block(&data[1], (uchar *)0 + currentAddress, len);						// store new trained IR code in eeprom
 		memcpy(&trained_irmp_data, &data[1], sizeof(trained_irmp_data));					// update trained IR code:
-	}
+	} 
 	/*
 	else if ( DoWriteReport == SetIRPollingTime )
 	{
 		OCR1A = (F_CPU / ((data[2] << 8 ) | data[1])) - 1;									// update new IR polling time, data[1-2] = new frequency
-	}
+	} 
 	*/
 	else if ( DoWriteReport == SetMinRepeats )
 	{
 		eeprom_write_block(&data[1], (uchar *)0 + currentAddress, len);						// store new MinRepeats in eeprom
 		memcpy(&MinRepeats, &data[1], sizeof(MinRepeats));									// update new MinRepeats received from host
-	}
+	} 
     currentAddress += len;
     bytesRemaining -= len;
     return bytesRemaining == 0; 															/* return 1 if this was the last chunk */
@@ -278,29 +279,29 @@ uchar   usbFunctionWrite(uchar *data, uchar len)
 
 /* ------------------------------------------------------------------------- */
 
-uchar   usbFunctionSetup(uchar data[8])
-{
+uchar   usbFunctionSetup(uchar data[8]) 
+{ 
 
 usbRequest_t    *rq = (void *)data;
 
-    if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_CLASS){    // HID class request
+    if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_CLASS){    // HID class request 
         if(rq->bRequest == USBRQ_HID_GET_REPORT){  // wValue: ReportType (highbyte), ReportID (lowbyte)
 
 		usbMsgPtr = replyBuf;
 
-            if(rq->wValue.bytes[0] == ReadPowerOnEnabled){ 									/* ReportID 2 ReadPowerOnEnabled */
+            if(rq->wValue.bytes[0] == ReadPowerOnEnabled){ 									/* ReportID 2 ReadPowerOnEnabled */ 
 				memcpy(&replyBuf[0], &rq->wValue.bytes[0], sizeof(uchar));					// copy report id
-				eeprom_read_block(&replyBuf[1], (uchar *)0 +AdressPowerOn, sizeof(PowerOnEnabled));		// copy PowerOn flag to reply buffer
+				eeprom_read_block(&replyBuf[1], (uchar *)0 +AdressPowerOn, sizeof(PowerOnEnabled));		// copy PowerOn flag to reply buffer 
                 return sizeof(PowerOnEnabled) + sizeof(uchar);  							// 1 bytes PowerOnEnabled struct + 1 byte ID
 
-            }else if(rq->wValue.bytes[0] == ReadTrainendIRCode){ 							/* ReportID 3 ReadTrainendIRCode */
+            }else if(rq->wValue.bytes[0] == ReadTrainendIRCode){ 							/* ReportID 3 ReadTrainendIRCode */ 
 				memcpy(&replyBuf[0], &rq->wValue.bytes[0], sizeof(uchar));					// copy report id
-				eeprom_read_block(&replyBuf[1], (uchar *)0 +AdressTrainedCode, sizeof(trained_irmp_data));		// copy trained IR code to reply buffer
+				eeprom_read_block(&replyBuf[1], (uchar *)0 +AdressTrainedCode, sizeof(trained_irmp_data));		// copy trained IR code to reply buffer  
                 return (sizeof(trained_irmp_data) + sizeof(uchar));							// 6 bytes irmp struct + 1 byte ID
 
-            }else if(rq->wValue.bytes[0] == ReadIrmpVersion){ 								/* ReportID 7 ReadIrmpVersion */
+            }else if(rq->wValue.bytes[0] == ReadIrmpVersion){ 								/* ReportID 7 ReadIrmpVersion */ 
 				memcpy(&replyBuf[0], &rq->wValue.bytes[0], sizeof(uchar));					// copy report id
-				memcpy(&replyBuf[1], &IrmpVersion, sizeof(IrmpVersion));					// copy Irmp version
+				memcpy(&replyBuf[1], &IrmpVersion, sizeof(IrmpVersion));					// copy Irmp version			
 	            bytesRemaining = sizeof(IrmpVersion);
 	            currentAddress = 0;
 				DoReadReport = ReadIrmpVersion;
@@ -310,59 +311,59 @@ usbRequest_t    *rq = (void *)data;
 	            bytesRemaining = sizeof(buf);
 	            currentAddress = 0;
 				DoReadReport = ReadLogData;
-	            return USB_NO_MSG;  														// use usbFunctionRead() to obtain data
+	            return USB_NO_MSG;  														// use usbFunctionRead() to obtain data				
 			#endif
-            }
-        }else if(rq->bRequest == USBRQ_HID_SET_REPORT){
-            if(rq->wValue.bytes[0] == SetPowerOnEnabled){   								/* ReportID 4 SetPowerOnEnabled */
+            }	 
+        }else if(rq->bRequest == USBRQ_HID_SET_REPORT){ 
+            if(rq->wValue.bytes[0] == SetPowerOnEnabled){   								/* ReportID 4 SetPowerOnEnabled */	
 	            bytesRemaining = sizeof(PowerOnEnabled);									//store PowerOnEnabled in EEProm:
 	            currentAddress = (int)AdressPowerOn;
 				DoWriteReport = SetPowerOnEnabled;											// set report id flag for usbFunctionWrite
-	            return USB_NO_MSG;  														// use usbFunctionWrite() to receive data from host
+	            return USB_NO_MSG;  														// use usbFunctionWrite() to receive data from host	
             }else if(rq->wValue.bytes[0] == SetTrainedIRCode){  							/* ReportID 5 SetTrainedIRCode */
 			    bytesRemaining = sizeof(trained_irmp_data);									// store IR Code in EEProm
 	            currentAddress = (int)AdressTrainedCode;
 				DoWriteReport = SetTrainedIRCode;											// set report id flag for usbFunctionWrite
-	            return USB_NO_MSG;  														// use usbFunctionWrite() to receive data from host
+	            return USB_NO_MSG;  														// use usbFunctionWrite() to receive data from host	    
 			/*
-            }else if(rq->wValue.bytes[0] == SetIRPollingTime){  							// ReportID 6 SetIRPollingTime
+            }else if(rq->wValue.bytes[0] == SetIRPollingTime){  							// ReportID 6 SetIRPollingTime 				
 	            bytesRemaining = sizeof(OCR1A);												// update new IR polling time
 				DoWriteReport = SetIRPollingTime;											// set report id flag for usbFunctionWrite
-	            return USB_NO_MSG;  														// use usbFunctionWrite() to receive data from host
+	            return USB_NO_MSG;  														// use usbFunctionWrite() to receive data from host	
 			*/
-            }else if(rq->wValue.bytes[0] == SetMinRepeats){  								/* ReportID 8 SetMinRepeats */
+            }else if(rq->wValue.bytes[0] == SetMinRepeats){  								/* ReportID 8 SetMinRepeats */				
 				currentAddress = (int)AdressMinRepeats;
 	            bytesRemaining = sizeof(MinRepeats);										// update new max repeat counter
 				DoWriteReport = SetMinRepeats;												// set report id flag for usbFunctionWrite
-	            return USB_NO_MSG;  														// use usbFunctionWrite() to receive data from host
+	            return USB_NO_MSG;  														// use usbFunctionWrite() to receive data from host	
 		#if USE_BOOTLOADER
-            }else if(rq->wValue.bytes[0] == ResetForBootloader){  							/* ReportID 9 host is requesting the bootloader */
-				eeprom_write_block(&EnableBootloader, (uchar *)0 + AdressBootloader, sizeof(uchar));
-				for(;;);   																	// Reset from watchdog
+            }else if(rq->wValue.bytes[0] == ResetForBootloader){  							/* ReportID 9 host is requesting the bootloader */				
+				eeprom_write_block(&EnableBootloader, (uchar *)0 + AdressBootloader, sizeof(uchar));					
+				for(;;);   																	// Reset from watchdog	            
 		#endif
-            }
+            }			    			         
 		}
-    }else{
+    }else{ 
         // ignore vendor type requests, we don't use any
-    }
-    return 0;
-}
+    } 
+    return 0; 
+} 
 /* ------------------------------------------------------------------------- */
 void SendINTData(void)
 {
-
+	
 	if (!(irmp_data.flags & IRMP_FLAG_REPETITION))											// first check if the IR command is repeated
 	{
 		RepeatCounter = 0;																	// new command received, reset RepeatCounter
-	}
+	}																	
 	else
-	{
+	{	
 		RepeatCounter++;																	// still the same command, inc RepeatCounter
-	}
+	}																
 
 	if ((RepeatCounter == 0) | ( RepeatCounter >= MinRepeats))								// only send interrupt if first command, or Repeatcounter >= MinRepeats
 	{
-		if (RepeatCounter >= MinRepeats)
+		if (RepeatCounter >= MinRepeats)	
 			RepeatCounter = MinRepeats;														// fix overflow for long key push
 
 		memcpy(&replyBuf[0], &NewIRCodeAvailable, sizeof(uchar));							// copy report id to reply buffer
@@ -377,11 +378,11 @@ void SendINTData(void)
 #if IRMP_LOGGING
 void irmp_log_usb (unsigned short len)
 {
-	memcpy(&replyBuf[0], &NewLogAvailable, sizeof(uchar));								// copy report id to reply buffer
+	memcpy(&replyBuf[0], &NewLogAvailable, sizeof(uchar));								// copy report id to reply buffer	
 	memcpy(&replyBuf[1], &len, sizeof(unsigned short));
-
+	
 	while (!usbInterruptIsReady()) usbPoll();											// check if USB int is ready
-		usbSetInterrupt(&replyBuf[0], sizeof(uchar) + sizeof(unsigned short));			// send ReportID + IR data
+		usbSetInterrupt(&replyBuf[0], sizeof(uchar) + sizeof(unsigned short));			// send ReportID + IR data		
 }
 #endif
 /* ------------------------------------------------------------------------- */
@@ -438,8 +439,8 @@ int main(void)
 		{																								// power on isn't stored yet, save the init value
 			eeprom_write_block(&PowerOnEnabled, (uchar *)0 +AdressPowerOn, sizeof(PowerOnEnabled));		// set PowerOn Enabled to default
 		}else{ memcpy(&PowerOnEnabled, &i, sizeof(PowerOnEnabled)); }									// update actual value
-	#endif
-
+	#endif	
+	
 	eeprom_read_block(&i, (uchar *)0 +AdressMinRepeats, sizeof(MinRepeats));							// read if MinRepeats is already set
 
 	if ( i == 0xFF )
@@ -468,7 +469,7 @@ int main(void)
 					if (PowerOnEnabled)
 					{
 						//compare trained code with last received code
-						if (memcmp(&irmp_data, &trained_irmp_data, sizeof(irmp_data) - 1) == 0)
+						if (memcmp(&irmp_data, &trained_irmp_data, sizeof(irmp_data) - 1) == 0)				 
 						{
 							SWITCH_PORT ^= _BV(SWITCH_BIT);												// switch on output pin form ~250ms
 						    while(--i)
@@ -478,16 +479,16 @@ int main(void)
 						        _delay_us(500);															// delay
 						    }
 							SWITCH_PORT ^= _BV(SWITCH_BIT);												// switch off output pin
-						}else{ SendINTData(); }															// set flag for received new IR code
-					}else{ SendINTData(); }																// set flag for received new IR code
+						}else{ SendINTData(); }															// set flag for received new IR code					
+					}else{ SendINTData(); }																// set flag for received new IR code				
 				}else{
-					eeprom_write_block(&irmp_data,(uchar *)0 + AdressTrainedCode, sizeof(irmp_data));	// no IR code trained, save it:
+					eeprom_write_block(&irmp_data,(uchar *)0 + AdressTrainedCode, sizeof(irmp_data));	// no IR code trained, save it:		
 					memcpy(&trained_irmp_data, &irmp_data, sizeof(irmp_data));							// update trained_irmp_data
 				}
 			#else
 				SendINTData();
 			#endif
-
+			
 			led1On();																					// toggle led
 			_delay_us(500);
 			led1Off();

@@ -9,7 +9,9 @@
 DEVICE=atmega8
 F_CPU=12000000
 
+#AVRDUDE = avrdude -c stk500v2 -p $(DEVICE) -P /dev/ttyUSB1
 AVRDUDE = avrdude -c usbasp -p $(DEVICE) -P /dev/ttyUSB0
+
 # Choose your favorite programmer and interface.
 
 COMPILE = avr-gcc -Wall -Os -Iusbdrv -Iirmp -I. -mmcu=$(DEVICE) -DF_CPU=$(F_CPU) -DDEBUG_LEVEL=0
